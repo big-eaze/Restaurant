@@ -19,8 +19,8 @@ function Cart() {
           initial={{ x: "100%" }}
           animate={{ x: 0 }}
           exit={{ x: "100%" }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className="fixed right-0 top-20 w-full sm:w-[70%] md:w-[50%] lg:w-[30%] max-w-[400px] bg-white shadow-lg z-50 p-6 flex flex-col"
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="fixed right-0 top-10 w-full sm:w-[70%] md:w-[50%] lg:w-[30%] max-w-[400px] bg-white shadow-lg z-50 p-6 flex flex-col"
         >
           {/* Close Button */}
           <button

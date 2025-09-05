@@ -32,7 +32,7 @@ function Header() {
     <>
       <Cart />
 
-      <div className={`sm:h-[120px] h-[80px]  fixed top-0 left-0 w-full z-50 flex items-center sm-justify-around justify-between px-4 transition-all duration-300 ${scrolled ? "bg-[#A0552D] shadow-md" : "bg-transparent shadow-md"}`}>
+      <div className={`sm:h-[120px] h-[80px]  fixed top-0 left-0 w-full z-40 flex items-center sm-justify-around justify-between px-4 transition-all duration-300 ${scrolled ? "bg-[#A0552D] shadow-md" : "bg-transparent shadow-md"}`}>
         <MobileNav />
         <Link to="/" className="sm-flex items-center  ">
           <div className="font-lobster cursor-pointer text-white sm:text-4xl text-2xl font-extrabold flex gap-1"><ChefHat className="text-white w-8 h-8 sm:w-10 sm:h-10" />Spice!Route</div>

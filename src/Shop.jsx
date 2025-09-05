@@ -101,7 +101,6 @@ function Shop() {
 
         {/* Main Shop Content */}
         <main className="w-full lg:w-3/4">
-          {/* Header */}
           <div className="flex flex-row items-start md:items-end justify-between gap-4 mb-8">
             <div>
               <h1 className="font-cormorant font-bold text-4xl">SHOP</h1>
@@ -115,7 +114,6 @@ function Shop() {
                 </button>
               </DropdownMenuTrigger>
 
-              {/* Renders menu at the end of <body>, avoids stacking issues */}
               <DropdownMenuPortal>
                 <DropdownMenuContent
                   className="custom-scrollbar w-[var(--radix-dropdown-menu-trigger-width)] max-h-[150px] overflow-y-auto whitespace-nowrap bg-[#F9F9EE] shadow-lg mt-2 text-sm p-2 z-[9999]"
@@ -135,7 +133,6 @@ function Shop() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {products.map((product, index) => (
               <div key={index} className="relative bg-[#C4A484] shadow-md flex flex-col gap-4 rounded overflow-hidden">
-                {/* Sale badge */}
                 {product.originalPrice > product.price && (
                   <div className="absolute top-2 left-2 bg-[#A0522D] px-3 py-1 text-[12px] font-cormorant font-bold text-white rounded">
                     SALE!
