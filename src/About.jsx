@@ -13,9 +13,9 @@ function About() {
         <div className=" w-full h-full font-cormorant font-bold text-7xl text-white flex flex-col gap-2 justify-center items-center">
           <div className="flex flex-col gap-4 items-center">
             <div className="w-[30px] h-[4px] rounded-xl bg-orange-600"></div>
-            <p className="text-white text-sm sm:text-base">more info on us</p>
+            <p className="text-white text-md sm:text-base font-cormorant">more info on us</p>
           </div>
-          <h1 className="font-cormorant font-bold text-6xl text-white">About</h1>
+          <h1 className="font-dancing font-bold text-6xl text-white">About</h1>
         </div>
       </div>
       <div className="w-full bg-[#F9F9EE]">

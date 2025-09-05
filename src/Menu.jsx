@@ -72,6 +72,7 @@ function MenuSection() {
         }}
       >
         <div className="w-full h-full bg-black bg-opacity-50 flex flex-col justify-center items-center text-center p-4">
+          <div className="w-[30px] h-[4px] rounded-xl bg-orange-600 mb-6"></div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-dancing text-white">
             Our Menu
           </h1>

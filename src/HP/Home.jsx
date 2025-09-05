@@ -1,16 +1,28 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import Header from "@/components/Header";
-import Footer from "../components/Footer.jsx";
+import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChefHat } from "lucide-react";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import Header from "@/components/Header";
+import Footer from "../components/Footer.jsx";
+import NewsletterSec from "@/components/NewsletterSec.jsx";
+
 
 function Home(openCart, setOpenCart) {
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [likedIndexes, setLikedIndexes] = useState([]);
 
   const [fade, setFade] = useState(true);
   const intervalRef = useRef(null);
+
+
+
+  function handleGalleryLikes(index) {
+    setLikedIndexes(
+      (prev) => prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    )
+  }
 
   const customersReviews = [
     {
@@ -81,6 +93,8 @@ function Home(openCart, setOpenCart) {
     }
     startAutoSlide();
   }
+
+
 
   return (
     <div>
@@ -162,12 +176,29 @@ function Home(openCart, setOpenCart) {
             "food-5.jpg", "food-6.jpg", "food-7.jpg", "food-8.jpg",
             "food-9.jpg", "food-10.jpg", "food-11.jpg", "food-12.jpg"
           ].map((src, i) => (
-            <img
-              key={i}
-              className="w-full h-64 object-cover object-center rounded-md shadow-md"
-              src={`/food-display/${src}`}
-              alt={`Food ${i + 1}`}
-            />
+            <div className="w-full h-64 relative">
+              <img
+                key={i}
+                className="w-full h-full object-cover object-center rounded-md shadow-md"
+                src={`/food-display/${src}`}
+                alt={`Food ${i + 1}`}
+              />
+              <button onClick={() => handleGalleryLikes(i)} className="absolute bottom-4 right-4">
+                <motion.div
+                  key={likedIndexes.includes(i) ? "filled" : "outline"} // force animation on toggle
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: [1.2, 1] }} // pop effect
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  {likedIndexes.includes(i) ? (
+                    <AiFillHeart className="w-6 h-6 sm:w-8 sm:h-8 text-red-600" />
+                  ) : (
+                    <AiOutlineHeart className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+                  )}
+                </motion.div>
+              </button>
+            </div>
+
           ))}
         </div>
       </div>
@@ -227,7 +258,7 @@ function Home(openCart, setOpenCart) {
         </div>
       </div>
 
-
+      <NewsletterSec />
       <Footer />
     </div>
 
