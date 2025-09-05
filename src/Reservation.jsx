@@ -21,9 +21,9 @@ function Reservation(openCart, setOpenCart) {
           w-full
           h-[80px] 
           sm:h-[120px]
-          bg-center 
+          bg-top 
           bg-cover 
-          bg-fixed 
+           
           
         "
         style={{ backgroundImage: "url('/Bg-img/sample1.jpg')" }}>
@@ -130,7 +130,7 @@ function Reservation(openCart, setOpenCart) {
           h-screen 
           bg-center 
           bg-cover 
-          bg-fixed 
+           
           my-10
         "
           style={{ backgroundImage: "url('/Bg-img/sample1.jpg')" }}

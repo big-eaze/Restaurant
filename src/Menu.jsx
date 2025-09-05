@@ -3,6 +3,10 @@ import { ShoppingBasket } from "lucide-react";
 import Footer from "./components/Footer.jsx";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Header from "./components/Header.jsx";
+import axios from "axios";
+import { menuData } from "../data/menuData.js";
+import { AnimatePresence, motion } from "framer-motion";
+
 
 
 function MenuSection() {
@@ -11,7 +15,20 @@ function MenuSection() {
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [filteredMenu, setFilteredMenu] = useState([])
+  const [specialMenu, setSpecialMenu] = useState([]);
 
+
+
+  //active menu
+  const [activeCategory, setActiveCategory] = useState("appetizer");
+
+  const categories = [
+    { label: "Appetizers", value: "appetizer" },
+    { label: "Main Courses", value: "main course" },
+    { label: "Desserts", value: "dessert" },
+    { label: "Beverages", value: "beverage" },
+  ];
 
   const updateScrollButtons = () => {
     const container = scrollRef.current;
@@ -21,6 +38,16 @@ function MenuSection() {
     setCanScrollLeft(container.scrollLeft > 0);
     setCanScrollRight(container.scrollLeft < maxScrollLeft - 1); // -1 avoids rounding issues
   };
+
+  useEffect(() => {
+    setFilteredMenu(
+      menuData.filter((meal) => meal.category === activeCategory)
+    )
+    setSpecialMenu(
+      menuData.filter((meal) => meal.category === "special")
+    );
+
+  }, [activeCategory]);
 
   useEffect(() => {
     updateScrollButtons(); // run once on mount
@@ -56,7 +83,6 @@ function MenuSection() {
   }
 
 
-
   return (
     <div className="w-full min-h-screen bg-[#F9F9EE]">
       <Header />
@@ -68,7 +94,6 @@ function MenuSection() {
           backgroundImage: "url('/food-display/food-15.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          backgroundAttachment: "fixed",
         }}
       >
         <div className="w-full h-full bg-black bg-opacity-50 flex flex-col justify-center items-center text-center p-4">
@@ -84,12 +109,20 @@ function MenuSection() {
 
       {/* Category Buttons */}
       <div className="w-full py-6 flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-6 md:gap-10">
-        {["Starters", "Main Courses", "Desserts", "Beverages"].map((cat) => (
+        {categories.map((cat) => (
           <button
-            key={cat}
-            className="px-4 w-[80%] sm:w-40 sm:px-6 py-2 sm:py-3 text-md sm:text-base hover:bg-[#A0522D] hover:text-white transition-all"
+            key={cat.value}
+            value={cat.value}
+            onClick={() => {
+              setActiveCategory(cat.value)
+            }}
+            className={`px-4 w-[80%] sm:w-40 sm:px-6 py-2 sm:py-3 text-md sm:text-base transition-all
+            ${activeCategory === cat.value
+                ? "bg-[#A0522D] text-white"
+                : "hover:bg-[#A0522D] hover:text-white"
+              }`}
           >
-            {cat}
+            {cat.label}
           </button>
         ))}
       </div>
@@ -97,48 +130,41 @@ function MenuSection() {
       {/* Menu Grid */}
       <div className="w-full px-4 sm:px-8 md:px-20 py-10 bg-[#F9F9EE] flex justify-center">
         <div className="w-full sm:w-[90%] lg:w-[80%] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {[
-            { name: "Grilled Salmon", price: 18.99, img: "/food-display/food-1.jpg" },
-            { name: "Caesar Salad", price: 9.99, img: "/food-display/food-2.jpg" },
-            { name: "Chocolate Lava Cake", price: 12.99, img: "/food-display/food-3.jpg" },
-            { name: "Margherita Pizza", price: 10.99, img: "/food-display/food-4.jpg" },
-            { name: "Spaghetti Carbonara", price: 14.99, img: "/food-display/food-5.jpg" },
-            { name: "Tiramisu", price: 8.99, img: "/food-display/food-6.jpg" },
-            { name: "Chicken Tikka Masala", price: 15.99, img: "/food-display/food-7.jpg" },
-            { name: "Mango Lassi", price: 5.99, img: "/food-display/food-8.jpg" },
-          ].map((item) => (
-            <div
-              key={item.name}
-              className="bg-[#C4A484] flex flex overflow-hidden shadow-md hover:shadow-lg transition-all"
-            >
-              {/* Image */}
-              <img
-                className="w-1/3 h-full object-cover object-center"
-                src={item.img}
-                alt={item.name}
-              />
+          <AnimatePresence mode="wait">
+            {filteredMenu.map((item) => (
+              <motion.div
+                key={item.name}
+                className="bg-[#C4A484] flex overflow-hidden shadow-md hover:shadow-lg transition-all h-56 sm:h-60 md:h-64"
+                initial={{ opacity: 0}}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.6 }}
+              >
+                <img
+                  className="w-1/3 h-full object-cover object-center"
+                  src={item.img}
+                  alt={item.name}
+                />
 
-              {/* Content */}
-              <div className="flex flex-col flex-grow p-4">
-                <h2 className="text-lg sm:text-xl font-bold">{item.name}</h2>
-                <p className="mt-2 text-sm text-gray-700">
-                  Delicious description goes here...
-                </p>
+                <div className="flex flex-col flex-grow p-4 justify-around">
+                  <div>
+                    <h2 className="text-lg sm:text-xl font-bold">{item.name}</h2>
+                    <p className="mt-2 text-sm text-gray-700 line-clamp-2">
+                      {item.description}
+                    </p>
+                  </div>
 
-                {/* Price + Button */}
-                <div className="mt-4 flex items-center justify-between">
-                  <p className="font-bold text-base sm:text-lg">
+                  <p className="font-bold text-base sm:text-lg mt-2 text-end">
                     ${item.price.toFixed(2)}
                   </p>
-                  <button className="flex items-center justify-center w-10 h-10 rounded-full bg-dark-overlay hover:basket-hover shadow-md hover:shadow-lg transition-all">
-                    <ShoppingBasket className="w-5 h-5 text-white" />
-                  </button>
                 </div>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
+
+
 
 
       {/* Reservation Section */}
@@ -148,7 +174,6 @@ function MenuSection() {
           backgroundImage: "url('/reservation4.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "bottom",
-          backgroundAttachment: "fixed",
         }}
       >
         <div className="w-full h-full bg-dark-overlay flex flex-col justify-center items-center text-center px-4">
@@ -186,9 +211,9 @@ function MenuSection() {
           ref={scrollRef}
           className="w-full sm:w-[90%] lg:w-[60%] overflow-x-auto no-scrollbar scroll-smooth pb-6 mx-auto flex gap-6 snap-x snap-mandatory"
         >
-          {[1, 2, 3, 4, 5].map((i) => (
+          {specialMenu.map((meal, i) => (
             <div
-              key={i}
+              key={i + 1}
               className="
     bg-[#C4A484] 
     flex-shrink-0
@@ -202,25 +227,22 @@ function MenuSection() {
             >
               <img
                 className="w-full h-[200px] sm:h-[250px] object-cover object-center"
-                src="/food-display/food-2.jpg"
+                src={meal.img}
                 alt="food"
               />
               <div className="p-4 w-full">
                 <h2 className="text-xl sm:text-2xl font-bold font-cormorant">
-                  Caesar Salad
+                  {meal.name}
                 </h2>
                 <p className="mt-2 font-cormorant text-sm sm:text-base">
-                  Crisp romaine lettuce tossed with Caesar dressing, croutons, and
-                  Parmesan cheese.
+                  {meal.description}
                 </p>
-                <div className="flex justify-between items-center mt-4">
+                <div className="flex justify-end items-center mt-4">
                   <div className="flex flex-col items-center">
-                    <p className="font-bold font-cormorant">$25.99</p>
-                    <p className="font-cormorant text-gray-500 line-through">$20.99</p>
+                    <p className="font-bold text-2xl font-cormorant">${meal.price}</p>
+                    <p className="font-cormorant text-lg text-gray-500 line-through">${meal.initialPrice}</p>
                   </div>
-                  <button className="flex items-center justify-center w-12 h-12 sm:w-[55px] sm:h-[70px] bg-[#A0522D] hover:bg-[#C4A484] shadow-md hover:shadow-lg transition-all">
-                    <ShoppingBasket className="w-6 h-6 text-white" />
-                  </button>
+
                 </div>
               </div>
             </div>

@@ -20,6 +20,22 @@ function App() {
     });
   }, [pathname]);
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // simulate a short delay for loading
+    const timer = setTimeout(() => setLoading(false), 5000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-white">
+        {/* Spinner */}
+        <div className="w-12 h-12 border-4 border-[#A0552D] border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
 
   return (

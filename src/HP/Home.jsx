@@ -155,11 +155,9 @@ function Home(openCart, setOpenCart) {
                 a culinary journey that is both familiar and exciting.
               </p>
 
-              {/* Divider for desktop only */}
-              <div className="hidden md:block w-[1px] bg-black h-auto"></div>
-
+              
               <Link to="/menu" className="w-full md:w-auto text-center">
-                <button className="border border-black px-8 py-3 hover:bg-black hover:text-white transition">
+                <button className="border border-black px-8 py-3 hover:bg-gray-600 hover:text-white transition">
                   See Menu
                 </button>
               </Link>
@@ -183,7 +181,7 @@ function Home(openCart, setOpenCart) {
                 src={`/food-display/${src}`}
                 alt={`Food ${i + 1}`}
               />
-              <button onClick={() => handleGalleryLikes(i)} className="absolute bottom-4 right-4">
+              <button key={i + 1} onClick={() => handleGalleryLikes(i)} className="absolute bottom-4 right-4">
                 <motion.div
                   key={likedIndexes.includes(i) ? "filled" : "outline"} // force animation on toggle
                   initial={{ scale: 0.8 }}

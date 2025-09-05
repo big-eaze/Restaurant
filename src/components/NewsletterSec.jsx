@@ -24,7 +24,7 @@ function NewsletterSec() {
             placeholder="Enter your email here"
             className="w-[100%] md:w-[400px] px-2 sm:px-4 py-3 text-gray-800 rounded-none outline-none border border-gray-300"
           />
-          <button className="bg-black hover:bg-orange-600 text-white px-4 text-sm sm:text-base sm:px-8 py-3 uppercase">
+          <button className="bg-gray-600 hover:bg-gray-800 transition delay-1.5 text-white px-4 text-sm sm:text-base sm:px-8 py-3 uppercase">
             Subscribe
           </button>
         </div>

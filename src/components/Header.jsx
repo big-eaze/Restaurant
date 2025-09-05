@@ -10,14 +10,14 @@ import { AnimatePresence } from "framer-motion";
 import MobileNav from "./MobileNav.jsx";
 
 function Header() {
-  const { openCart, setOpenCart, openMenu, setOpenMenu } = useContext(MenuContext);
+  const { setOpenCart, openMenu, setOpenMenu } = useContext(MenuContext);
 
 
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     function handleScroll() {
-      if (window.scrollY > 50) {
+      if (window.scrollY > 100) {
         setScrolled(true);
       } else {
         setScrolled(false);
