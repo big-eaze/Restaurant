@@ -8,12 +8,12 @@ function About() {
 
   return (
     <>
-      <div className="w-full h-[700px] bg-cover bg-top" style={{ backgroundImage: "url(/reservation4.jpg)" }}>
+      <div className="w-full h-[700px] bg-cover bg-top md:bg-bottom" style={{ backgroundImage: "url(/about1.jpg)" }}>
         <Header />
         <div className=" w-full h-full font-cormorant font-bold text-7xl text-white flex flex-col gap-2 justify-center items-center">
           <div className="flex flex-col gap-4 items-center">
             <div className="w-[30px] h-[4px] rounded-xl bg-orange-600"></div>
-            <p className="text-white text-md sm:text-base font-cormorant">more info on us</p>
+            <p className="text-white text-lg sm:text-base font-cormorant">more info on us</p>
           </div>
           <h1 className="font-dancing font-bold text-6xl text-white">About</h1>
         </div>
