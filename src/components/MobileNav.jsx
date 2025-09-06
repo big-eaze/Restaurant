@@ -8,7 +8,7 @@ import React, { useContext } from "react";
 
 export default function MobileNav() {
 
-  const { openMenu } = useContext(MenuContext);
+  const { openMenu, setOpenMenu } = useContext(MenuContext);
 
   return (
     <AnimatePresence mode="wait">
@@ -40,19 +40,19 @@ export default function MobileNav() {
             {/* Nav Items */}
 
             <nav className="flex flex-col gap-6 p-8 text-md font-medium">
-              <Link to="/menu" className="hover:text-orange-500  transition-colors">
+              <Link onClick={() => setOpenMenu(false)} to="/menu" className="hover:text-orange-500  transition-colors">
                 Menu
               </Link>
-              <Link to="/reservation" className="hover:text-orange-500 transition-colors">
+              <Link onClick={() => setOpenMenu(false)} to="/reservation" className="hover:text-orange-500 transition-colors">
                 Reservation
               </Link>
-              <Link to="/menu" className="hover:text-orange-500 transition-colors">
+              <Link onClick={() => setOpenMenu(false)} to="/about" className="hover:text-orange-500 transition-colors">
                 About Us
               </Link>
-              <Link to="/contact" className="hover:text-orange-500 transition-colors">
+              <Link onClick={() => setOpenMenu(false)} to="/contact" className="hover:text-orange-500 transition-colors">
                 Contact
               </Link>
-              <Link to="/shop" className="hover:text-orange-500 transition-colors">
+              <Link onClick={() => setOpenMenu(false)} to="/shop" className="hover:text-orange-500 transition-colors">
                 Shop
               </Link>
             </nav>

@@ -1,4 +1,5 @@
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 
 function Footer() {
@@ -18,11 +19,11 @@ function Footer() {
         <div className="flex flex-col gap-4">
           <h4 className="font-bold text-xl">Quick Links</h4>
           <ul className="flex flex-col gap-2 ">
-            <li><a href="/menu" className="hover:underline">Menu</a></li>
-            <li><a href="/reservation" className="hover:underline">Reservation</a></li>
-            <li><a href="/about" className="hover:underline">About Us</a></li>
-            <li><a href="/contact" className="hover:underline">Contact</a></li>
-            <li><a href="/shop" className="hover:underline">Shop</a></li>
+            <li><Link href="/menu" className="hover:underline">Menu</Link></li>
+            <li><Link href="/reservation" className="hover:underline">Reservation</Link></li>
+            <li><Link href="/about" className="hover:underline">About Us</Link></li>
+            <li><Link href="/contact" className="hover:underline">Contact</Link></li>
+            <li><Link href="/shop" className="hover:underline">Shop</Link></li>
           </ul>
         </div>
 
