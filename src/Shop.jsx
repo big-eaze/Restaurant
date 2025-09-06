@@ -5,22 +5,19 @@ import { FaShoppingBasket, FaShoppingCart } from "react-icons/fa";
 import Footer from "./components/Footer";
 import NewsletterSec from "./components/NewsletterSec";
 import Header from "./components/Header";
+import { shopData } from "../data/shopFood.js";
 
 function Shop() {
 
   const [sortOrder, setSortOrder] = useState('Default sorting');
   const [priceRange, setPriceRange] = useState([0, 100]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 6;
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = shopData.slice(indexOfFirstRow, indexOfLastRow);
 
-  const products = [
-    { name: 'Salmon with tomatoes', price: 20.99, originalPrice: 25.99, img: '/food-display/food-10.jpg' },
-    { name: 'Paella with seafood', price: 3.50, originalPrice: 5.99, img: '/food-display/food-11.jpg' },
-    { name: 'Salmon', price: 1.50, originalPrice: 1.50, img: '/food-display/food-12.jpg' },
-    { name: 'Casserole', price: 4.99, originalPrice: 5.99, img: '/food-display/food-13.jpg' },
-    { name: "pasta with beef", price: 5.43, originalPrice: 7.20, img: '/food-display/food-16.jpg' },
-    { name: "Burger", price: 2.43, originalPrice: 6.20, img: '/food-display/food-1.jpg' }
-
-  ];
-
+  const totalPages = Math.ceil(shopData.length / rowsPerPage);
 
   const handleSortChange = (e) => setSortOrder(e.target.value);
   return (
@@ -131,7 +128,7 @@ function Shop() {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product, index) => (
+            {currentRows.map((product, index) => (
               <div key={index} className="relative bg-[#C4A484] shadow-md flex flex-col gap-4 rounded overflow-hidden">
                 {product.originalPrice > product.price && (
                   <div className="absolute top-2 left-2 bg-[#A0522D] px-3 py-1 text-[12px] font-cormorant font-bold text-white rounded">
@@ -149,10 +146,10 @@ function Shop() {
                   <h3 className="text-2xl font-semibold font-cormorant">{product.name}</h3>
                   <div className="flex items-center justify-between pb-4">
                     <div>
-                      <p className="text-xl font-bold font-cormorant">€{product.price.toFixed(2)}</p>
-                      {product.originalPrice > product.price && (
-                        <p className="text-sm text-gray-500 line-through">€{product.originalPrice}</p>
-                      )}
+                      <p className="text-xl font-bold font-cormorant">€{product.initialPrice.toFixed(2)}</p>
+
+                      <p className="text-sm text-gray-500 line-through">€{product.price.toFixed(2)}</p>
+
                     </div>
                     <button className="bg-[#A0522D] hover:bg-[#C4A484] text-white p-3 transition">
                       <FaShoppingCart className="w-4 h-4" />
@@ -164,11 +161,22 @@ function Shop() {
           </div>
 
           {/* Pagination */}
-          <div className="flex gap-1 justify-center mt-8">
-            <button className="py-3 px-4 bg-[#A0552D] text-white">1</button>
-            <button className="py-3 px-4 hover:bg-[#A0552D] hover:text-white transition">2</button>
-            <button className="py-3 px-4 hover:bg-[#A0552D] hover:text-white transition">→</button>
+          <div className="flex gap-2 justify-center mt-8">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`py-2 px-4 border rounded transition 
+        ${currentPage === page
+                    ? "bg-[#A0552D] text-white"
+                    : "hover:bg-[#A0552D] hover:text-white"
+                  }`}
+              >
+                {page}
+              </button>
+            ))}
           </div>
+
         </main>
       </div>
 
