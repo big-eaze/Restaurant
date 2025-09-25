@@ -11,7 +11,46 @@ function Shop() {
 
   const [sortOrder, setSortOrder] = useState('Default sorting');
   const [priceRange, setPriceRange] = useState([0, 100]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTag, setSelectedTag] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
+  
+
+
+  // 1. Filter by category
+  let filteredData = shopData.filter(product => {
+    if (selectedCategory === "All") return true;
+    return product.category === selectedCategory;
+  });
+
+  // 2. Filter by search
+  filteredData = filteredData.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // 3. Filter by price
+  filteredData = filteredData.filter(product =>
+    product.initialPrice >= priceRange[0] && product.initialPrice <= priceRange[1]
+  );
+
+  // 4. Filter by tag
+  if (selectedTag) {
+    filteredData = filteredData.filter(product =>
+      product.tags?.includes(selectedTag)
+    );
+  }
+
+  // Sorting (example for price low to high)
+  if (sortOrder === "Sort by price: low to high") {
+    filteredData = [...filteredData].sort((a, b) => a.initialPrice - b.initialPrice);
+  }
+  if (sortOrder === "Sort by price: high to low") {
+    filteredData = [...filteredData].sort((a, b) => b.initialPrice - a.initialPrice);
+  }
+
+  // Then apply pagination
   const rowsPerPage = 6;
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -146,9 +185,9 @@ function Shop() {
                   <h3 className="text-2xl font-semibold font-cormorant">{product.name}</h3>
                   <div className="flex items-center justify-between pb-4">
                     <div>
-                      <p className="text-xl font-bold font-cormorant">€{product.initialPrice.toFixed(2)}</p>
+                      <p className="text-xl font-bold font-cormorant">€{product.price.toFixed(2)}</p>
 
-                      <p className="text-sm text-gray-500 line-through">€{product.price.toFixed(2)}</p>
+                      <p className="text-sm text-gray-500 line-through">€{product.initialPrice.toFixed(2)}</p>
 
                     </div>
                     <button className="bg-[#A0522D] hover:bg-[#C4A484] text-white p-3 transition">
