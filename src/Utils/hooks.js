@@ -73,3 +73,31 @@ export function useAddToCart() {
 }
 
 
+
+export function useUpdateCartItemQuantity() {
+  const { cartItems, setCartItems, cartQuantity, setCartQuantity } = useContext(MenuContext);
+
+  function decreaseFromCart(productId) {
+    setCartItems(cartItems
+      .map(item =>
+        item.id === productId ? { ...item, quantity: item.quantity - 1 } : item
+      )
+      .filter(item => item.quantity > 0) // remove if quantity <= 0
+    );
+    setCartQuantity(cartQuantity - 1); // Decrease total cart quantity
+  };
+
+  function increaseFromCart(productId) {
+    setCartItems(cartItems
+      .map(item =>
+        (item.id === productId && item.quantity < 10) ? { ...item, quantity: item.quantity + 1 } : item
+      )
+    );
+    setCartQuantity(cartQuantity + 1); // Increase total cart quantity
+  }
+
+  return { decreaseFromCart, increaseFromCart };
+
+}
+
+

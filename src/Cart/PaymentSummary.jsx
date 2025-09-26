@@ -26,7 +26,7 @@ function PaymentSummary() {
         {/* Subtotal Row */}
         <div className="border-b py-3 flex justify-between text-sm">
           <span className="text-gray-700">Subtotal</span>
-          <span className="font-medium">€{subTotal}</span>
+          <span className="font-medium">€{subTotal.toFixed(2)}</span>
         </div>
 
         {/* Total Row */}

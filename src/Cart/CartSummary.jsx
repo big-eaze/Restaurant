@@ -1,4 +1,4 @@
-import { useRemoveFromCart } from "@/Utils/hooks";
+import { useRemoveFromCart, useUpdateCartItemQuantity } from "@/Utils/hooks";
 import { useCart } from "@/Utils/hooks";
 import { ShoppingCart } from "lucide-react";
 import React from "react";
@@ -7,6 +7,7 @@ function CartSummary() {
 
   const cart = useCart();
   const removeFromCart = useRemoveFromCart();
+  const {increaseFromCart, decreaseFromCart} = useUpdateCartItemQuantity();
 
 
 
@@ -37,7 +38,7 @@ function CartSummary() {
 
                   <div className="flex items-center gap-2 text-sm text-gray-500">
                     <span className="line-through">{item.oldPrice}</span>
-                    <span className="text-black font-semibold">€{item.price}</span>
+                    <span className="text-black font-semibold">€{item.price.toFixed(2)}</span>
                   </div>
 
                   <span className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded w-fit mt-1">
@@ -50,9 +51,9 @@ function CartSummary() {
 
 
                   <div className="flex items-center mt-3 gap-2">
-                    <button className="border px-3 py-1 rounded hover:bg-gray-100">−</button>
+                    <button onClick={() => decreaseFromCart(item.id)} className="border px-3 py-1 rounded hover:bg-gray-100">−</button>
                     <span className="px-2">{item.quantity}</span>
-                    <button className="border px-3 py-1 rounded hover:bg-gray-100">+</button>
+                    <button onClick={() => increaseFromCart(item.id)} className="border px-3 py-1 rounded hover:bg-gray-100">+</button>
                   </div>
 
 
@@ -63,7 +64,7 @@ function CartSummary() {
                 </div>
               </div>
               <div className="text-right font-semibold text-lg md:min-w-[80px]">
-                €{item.price}
+                €{(item.price * item.quantity).toFixed(2)}
               </div>
             </div>
           )))
