@@ -33,11 +33,23 @@ export function calculateSubTotal(cart) {
   return cart.reduce((total, item) => total + item.totalPrice, 0);
 }
 
+export function useRemoveFromCart() {
+  const { cartItems, setCartItems, cartQuantity, setCartQuantity } = useContext(MenuContext);
+
+  function removeFromCart(productId) {
+    const itemToRemove = cartItems.find(item => item.id === productId);
+    if (!itemToRemove) return; // Item not found in cart
+
+    setCartItems(cartItems.filter(item => item.id !== productId));
+    setCartQuantity(cartQuantity - itemToRemove.quantity);
+  }
+  return removeFromCart;
+}
 
 
 export function useAddToCart() {
   // Implementation for adding items to the cart
-  const { cartItems, setCartItems,cartQuantity, setCartQuantity } = useContext(MenuContext);
+  const { cartItems, setCartItems, cartQuantity, setCartQuantity } = useContext(MenuContext);
 
   function addToCart(productId) {
 

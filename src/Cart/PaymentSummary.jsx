@@ -32,7 +32,7 @@ function PaymentSummary() {
         {/* Total Row */}
         <div className="py-3 flex justify-between text-base font-semibold">
           <span>Total</span>
-          <span>€{subTotal}</span>
+          <span>€{subTotal.toFixed(2)}</span>
         </div>
       </div>
 

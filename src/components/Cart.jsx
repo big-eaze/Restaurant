@@ -58,7 +58,7 @@ function Cart() {
           {/* Subtotal */}
           <div className="flex justify-between items-center py-4 border-t mt-4 text-sm">
             <p className="font-semibold">SUBTOTAL:</p>
-            <p className="font-bold text-lg">€{subTotal}</p>
+            <p className="font-bold text-lg">€{subTotal.toFixed(2)}</p>
           </div>
 
           {/* Buttons */}

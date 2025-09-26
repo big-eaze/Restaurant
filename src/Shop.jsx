@@ -30,8 +30,8 @@ function Shop() {
     setAddedProduct(id);
 
     console.log(`Added product ID: ${id} to cart`);
-    // Hide the message after 4s
-    setTimeout(() => setAddedProduct(null), 6000);
+    // Hide the message after 2s
+    setTimeout(() => setAddedProduct(null), 2000);
   };
 
 
