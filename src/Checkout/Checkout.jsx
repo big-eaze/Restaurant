@@ -9,8 +9,9 @@ import Header from '@/components/Header';
 
 
 
-
 function Checkout() {
+
+
   //for country/region dropdown
   const [countries, setCountries] = useState([]);
   const [filteredCountries, setFilteredCountries] = useState([]);
@@ -62,7 +63,6 @@ function Checkout() {
   function handleCountrySelect(countryName) {
     const selectedCountryObj = countries.find(c => c.country === countryName);
     const cities = selectedCountryObj ? selectedCountryObj.cities : [];
-    console.log(cities);
     setSelectedCountry(countryName);
     setState(cities); // Store cities for second dropdown
   };

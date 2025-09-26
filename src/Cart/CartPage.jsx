@@ -4,6 +4,7 @@ import CartSummary from "./CartSummary";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 
+
 function CartPage() {
   return (
     <>

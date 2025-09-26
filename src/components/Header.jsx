@@ -10,7 +10,7 @@ import { AnimatePresence } from "framer-motion";
 import MobileNav from "./MobileNav.jsx";
 
 function Header() {
-  const { setOpenCart, openMenu, setOpenMenu } = useContext(MenuContext);
+  const { setOpenCart, openMenu, setOpenMenu, cartQuantity } = useContext(MenuContext);
 
 
   const [scrolled, setScrolled] = useState(false);
@@ -109,7 +109,7 @@ function Header() {
             className="relative cursor-pointer hover:text-gray-300">
             <FiShoppingCart className="sm:w-10 sm:h-10 w-8 h-8 text-white" />
             <span className={`absolute -top-2 -right-2  text-white sm:text-xl w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-full shadow-md ${scrolled ? "bg-black" : "bg-[#A0552D]"}`}>
-              0
+              {cartQuantity}
             </span>
           </div>
 

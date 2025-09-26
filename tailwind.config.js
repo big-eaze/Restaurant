@@ -14,7 +14,7 @@ export default {
         dancing: ["Dancing Script", "sans-serif"],
         belleza: ["belleza", "sans-serif"]
       },
-    },
+    }
   },
   plugins: [],
 }

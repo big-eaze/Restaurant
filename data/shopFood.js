@@ -6,6 +6,7 @@ export const shopData = [
     img: "/shop/grilled-chicken.jpg",
     price: 14.99,
     initialPrice: 17.99,
+    discount: "17%",
     category: "starter",
   },
   {
@@ -15,6 +16,7 @@ export const shopData = [
     img: "/shop/margherita-pizza.jpg",
     price: 18.5,
     initialPrice: 21.0,
+    discount: "12%",
     category: "main",
   },
   {
@@ -24,6 +26,7 @@ export const shopData = [
     img: "/shop/spaghetti-carbonara.jpg",
     price: 20.0,
     initialPrice: 24.0,
+    discount: "17%",
     category: "main",
   },
   {
@@ -33,6 +36,7 @@ export const shopData = [
     img: "/shop/beef-burger.jpg",
     price: 16.75,
     initialPrice: 19.5,
+    discount: "14%",
     category: "main",
   },
   {
@@ -42,6 +46,7 @@ export const shopData = [
     img: "/shop/seafood-paella.jpg",
     price: 27.99,
     initialPrice: 32.5,
+    discount: "14%",
     category: "main",
   },
   {
@@ -51,6 +56,7 @@ export const shopData = [
     img: "/shop/chocolate-lava.jpg",
     price: 11.5,
     initialPrice: 13.0,
+    discount: "12%",
     category: "dessert",
   },
   {
@@ -60,6 +66,7 @@ export const shopData = [
     img: "/shop/strawberry-cheesecake.jpg",
     price: 12.0,
     initialPrice: 14.0,
+    discount: "14%",
     category: "dessert",
   },
   {
@@ -69,6 +76,7 @@ export const shopData = [
     img: "/shop/tiramisu.jpg",
     price: 13.25,
     initialPrice: 15.5,
+    discount:  "15%",
     category: "dessert",
   },
 ];

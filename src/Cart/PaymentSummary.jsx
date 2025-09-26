@@ -1,7 +1,14 @@
+import { calculateSubTotal, useCart } from "@/Utils/hooks";
 import React from "react";
 import { Link } from "react-router-dom";
 
 function PaymentSummary() {
+
+
+  const cart = useCart();
+  const subTotal = calculateSubTotal(cart);
+
+
   return (
     <div className="w-full md:w-80">
       {/* Cart Totals Box */}
@@ -19,13 +26,13 @@ function PaymentSummary() {
         {/* Subtotal Row */}
         <div className="border-b py-3 flex justify-between text-sm">
           <span className="text-gray-700">Subtotal</span>
-          <span className="font-medium">€10.99</span>
+          <span className="font-medium">€{subTotal}</span>
         </div>
 
         {/* Total Row */}
         <div className="py-3 flex justify-between text-base font-semibold">
           <span>Total</span>
-          <span>€10.99</span>
+          <span>€{subTotal}</span>
         </div>
       </div>
 

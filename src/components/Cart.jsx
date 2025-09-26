@@ -3,14 +3,20 @@ import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MenuContext } from "@/Utils/MenuContext";
 import { Link } from "react-router-dom";
+import { useCart, calculateSubTotal } from "@/Utils/hooks";
+
 
 function Cart() {
   const { openCart, setOpenCart } = useContext(MenuContext);
 
-  const items = [
-    { name: "pasta", image: "/food-display/food-6.jpg", quantity: 1, price: 4.5 },
-    { name: "burger & chips", image: "/food-display/food-2.jpg", quantity: 1, price: 2.45 }
-  ];
+
+
+
+  const cart = useCart();
+  const subTotal = calculateSubTotal(cart);
+
+
+
 
   return (
     <AnimatePresence mode="wait">
@@ -32,10 +38,10 @@ function Cart() {
 
           {/* Items */}
           <div className="flex flex-col gap-4 mt-10 overflow-y-auto flex-grow">
-            {items.map((item, index) => (
+            {cart.map((item, index) => (
               <div key={index} className="flex items-center gap-4 border-b pb-3">
                 <img
-                  src={item.image}
+                  src={item.img}
                   alt={item.name}
                   className="w-[70px] h-[70px] object-cover rounded"
                 />
@@ -52,7 +58,7 @@ function Cart() {
           {/* Subtotal */}
           <div className="flex justify-between items-center py-4 border-t mt-4 text-sm">
             <p className="font-semibold">SUBTOTAL:</p>
-            <p className="font-bold text-lg">€12.45</p>
+            <p className="font-bold text-lg">€{subTotal}</p>
           </div>
 
           {/* Buttons */}

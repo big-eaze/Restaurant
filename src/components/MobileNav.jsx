@@ -8,7 +8,7 @@ import React, { useContext } from "react";
 
 export default function MobileNav() {
 
-  const { openMenu, setOpenMenu } = useContext(MenuContext);
+  const { openMenu, setOpenMenu, } = useContext(MenuContext);
 
   return (
     <AnimatePresence mode="wait">

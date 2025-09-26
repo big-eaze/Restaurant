@@ -155,7 +155,7 @@ function Home(openCart, setOpenCart) {
                 a culinary journey that is both familiar and exciting.
               </p>
 
-              
+
               <Link to="/menu" className="w-full md:w-auto text-center">
                 <button className="border border-black px-8 py-3 hover:bg-gray-600 hover:text-white transition">
                   See Menu
@@ -174,9 +174,9 @@ function Home(openCart, setOpenCart) {
             "food-5.jpg", "food-6.jpg", "food-7.jpg", "food-8.jpg",
             "food-9.jpg", "food-10.jpg", "food-11.jpg", "food-12.jpg"
           ].map((src, i) => (
-            <div className="w-full h-64 relative">
+            <div key={i} className="w-full h-64 relative">
               <img
-                key={i}
+
                 className="w-full h-full object-cover object-center rounded-md shadow-md"
                 src={`/food-display/${src}`}
                 alt={`Food ${i + 1}`}
