@@ -23,7 +23,7 @@
   }
 
   html::-webkit-scrollbar-thumb {
-    background-color: #A0552D;
+    background-color: #C38E5B;
     /* thumb color */
     border-radius: 4px;
     /* optional rounded corners */
@@ -37,7 +37,7 @@
   /* For Firefox */
   html {
     scrollbar-width: thin;
-    scrollbar-color: #A0552D transparent;
+    scrollbar-color: #C38E5B transparent;
   }
 
 
@@ -150,7 +150,7 @@
     width: 16px;
     /* Thumb size */
     height: 16px;
-    background: #A0552D;
+    background: #C38E5B;
     /* Your color */
     border-radius: 50%;
     cursor: pointer;
@@ -159,7 +159,7 @@
   input[type="range"]::-moz-range-thumb {
     width: 16px;
     height: 16px;
-    background: #A0552D;
+    background: #C38E5B;
     border-radius: 50%;
     cursor: pointer;
   }
@@ -178,7 +178,7 @@
   }
 
   .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: #A0552D;
+    background-color: #C38E5B;
     border-radius: 10px;
   }
 
@@ -191,7 +191,7 @@
   /* for firefox browser*/
   .custom-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #A0552D transparent;
+    scrollbar-color: #C38E5B transparent;
   }
 
 

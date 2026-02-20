@@ -1,133 +1,208 @@
-import React, { useState } from 'react'
-import { FaArrowLeft } from 'react-icons/fa';
-
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowLeft, CreditCard, Building2, Wallet, FileText, Lock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentOptions = () => {
-
-  //payment states
   const [selectedPayment, setSelectedPayment] = useState('bank');
   const [addNote, setAddNote] = useState(false);
+  const [note, setNote] = useState('');
+  const navigate = useNavigate();
 
   const options = [
     {
       value: 'bank',
-      label: 'Direct bank transfer',
+      label: 'Direct Bank Transfer',
+      icon: Building2,
       description:
         'Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.',
     },
-    { value: 'check', label: 'Check payments', description: "Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode" },
-    { value: 'cod', label: 'Cash on delivery', description: "Pay with cash upon delivery" },
+    {
+      value: 'check',
+      label: 'Check Payments',
+      icon: FileText,
+      description: "Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode"
+    },
+    {
+      value: 'cod',
+      label: 'Cash on Delivery',
+      icon: Wallet,
+      description: "Pay with cash upon delivery"
+    },
   ];
 
-
   return (
-    <div className="w-full  space-y-6">
-      {/* Payment Options */}
-      <div className="bg-[#f5f4f2] w-full rounded-md shadow-sm p-4">
-        <h2 className="text-lg font-semibold mb-4">PAYMENT OPTIONS</h2>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.3 }}
+      className="space-y-6"
+    >
+      {/* Payment Options Card */}
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-full bg-[#C38E5B]/10 border border-[#C38E5B]/20 flex items-center justify-center">
+            <CreditCard className="w-5 h-5 text-[#C38E5B]" />
+          </div>
+          <h3 className="text-xl font-serif text-[#F5F1EB]">Payment Method</h3>
+        </div>
 
-        {options.map((option) => (
-          <label
-            key={option.value}
-            className={`block cursor-pointer border ${selectedPayment === option.value
-                ? "border-black bg-transparent"
-                : "border-transparent"
-              }`}
-          >
-            <div className="p-4 flex flex-col border border-gray-200">
-              <div className="w-full flex gap-3">
-                {/* Custom Radio */}
-                <span
-                  className={`w-5 h-5 border flex items-center justify-center ${selectedPayment === option.value
-                      ? "border-black"
-                      : "border-gray-400"
-                    }`}
-                >
-                  {selectedPayment === option.value && (
-                    <span className="w-2.5 h-2.5 bg-black rounded-full"></span>
-                  )}
-                </span>
+        <div className="space-y-3">
+          {options.map((option) => {
+            const Icon = option.icon;
+            return (
+              <motion.label
+                key={option.value}
+                whileHover={{ scale: 1.01 }}
+                className={`block cursor-pointer border rounded-xl transition-all ${selectedPayment === option.value
+                  ? "border-[#C38E5B] bg-[#C38E5B]/5"
+                  : "border-white/10 bg-white/5 hover:bg-white/10"
+                  }`}
+              >
+                <div className="p-4">
+                  <div className="flex items-start gap-4">
+                    {/* Custom Radio */}
+                    <div className="flex-shrink-0 mt-0.5">
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${selectedPayment === option.value
+                          ? "border-[#C38E5B]"
+                          : "border-neutral-500"
+                          }`}
+                      >
+                        {selectedPayment === option.value && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="w-2.5 h-2.5 bg-[#C38E5B] rounded-full"
+                          />
+                        )}
+                      </div>
+                    </div>
 
-                <span className="text-sm">{option.label}</span>
-              </div>
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-2">
+                        <Icon className={`w-5 h-5 ${selectedPayment === option.value ? 'text-[#C38E5B]' : 'text-neutral-400'}`} />
+                        <span className={`font-medium ${selectedPayment === option.value ? 'text-[#F5F1EB]' : 'text-neutral-300'}`}>
+                          {option.label}
+                        </span>
+                      </div>
 
-              {selectedPayment === option.value && option.description && (
-                <p className="text-sm text-gray-600 mt-2">{option.description}</p>
-              )}
-            </div>
+                      <AnimatePresence>
+                        {selectedPayment === option.value && option.description && (
+                          <motion.p
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="text-sm text-neutral-400 leading-relaxed"
+                          >
+                            {option.description}
+                          </motion.p>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+                </div>
 
-            {/* Hidden Radio Input */}
-            <input
-              type="radio"
-              name="payment"
-              value={option.value}
-              checked={selectedPayment === option.value}
-              onChange={() => setSelectedPayment(option.value)}
-              className="hidden"
-            />
-          </label>
-        ))}
+                <input
+                  type="radio"
+                  name="payment"
+                  value={option.value}
+                  checked={selectedPayment === option.value}
+                  onChange={() => setSelectedPayment(option.value)}
+                  className="hidden"
+                />
+              </motion.label>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Add Note */}
-      <div className="bg-[#f5f4f2] rounded-md shadow-sm p-4">
-        <label>
-          <div className="flex items-center gap-2 cursor-pointer">
-            <span
-              className={`w-5 h-5 border flex items-center justify-center ${addNote ? "border-black" : "border-gray-400"
+      {/* Add Note Card */}
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 sm:p-8">
+        <label className="cursor-pointer">
+          <div className="flex items-center gap-3 mb-4">
+            <div
+              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${addNote ? "border-[#C38E5B] bg-[#C38E5B]/10" : "border-neutral-500"
                 }`}
             >
               {addNote && (
-                <span className="w-2.5 h-2.5 bg-black rounded-full"></span>
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="w-2.5 h-2.5 bg-[#C38E5B] rounded-sm"
+                />
               )}
-            </span>
+            </div>
 
             <input
               type="checkbox"
               checked={addNote}
-              value="add"
               onChange={() => setAddNote(!addNote)}
               className="hidden"
             />
-            <span className="text-sm">Add a note to your order</span>
+
+            <div className="flex items-center gap-2">
+              <FileText className={`w-4 h-4 ${addNote ? 'text-[#C38E5B]' : 'text-neutral-400'}`} />
+              <span className="text-sm text-[#F5F1EB]">Add a note to your order</span>
+            </div>
           </div>
 
-          {addNote && (
-            <textarea
-              className="w-full h-40 outline-none resize-none text-sm sm:text-base p-3 mt-2 border-2"
-              placeholder="Note about your order"
-            />
-          )}
+          <AnimatePresence>
+            {addNote && (
+              <motion.textarea
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 160 }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3 }}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[#F5F1EB] placeholder:text-neutral-500 resize-none focus:outline-none focus:border-[#C38E5B] focus:ring-2 focus:ring-[#C38E5B]/20 transition-all"
+                placeholder="Special instructions or notes about your order..."
+              />
+            )}
+          </AnimatePresence>
         </label>
       </div>
 
       {/* Footer */}
-      <div className="flex flex-col gap-7">
-        <div className="h-[1px] bg-gray-200 mt-6"></div>
+      <div className="space-y-6">
+        <div className="h-px bg-white/10" />
 
-        <div className="flex flex-col gap-3">
-          <p className="text-xs text-gray-500 text-center">
-            By proceeding with your purchase you agree to our Terms and Conditions
-            and Privacy Policy
-          </p>
+        {/* Terms */}
+        <p className="text-xs text-center text-neutral-500 leading-relaxed">
+          By proceeding with your purchase you agree to our{' '}
+          <span className="text-[#C38E5B] hover:text-[#D4A574] cursor-pointer">Terms and Conditions</span>
+          {' '}and{' '}
+          <span className="text-[#C38E5B] hover:text-[#D4A574] cursor-pointer">Privacy Policy</span>
+        </p>
 
-          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-4 p-3">
-            {/* Return to Cart */}
-            <div className="flex items-center gap-2 cursor-pointer hover:text-gray-400">
-              <FaArrowLeft className="text-sm" />
-              <span className="text-sm">Return to Cart</span>
-            </div>
+        {/* Actions */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          {/* Return to Cart */}
+          <motion.button
+            whileHover={{ x: -4 }}
+            onClick={() => navigate("/cart")}
+            className="flex items-center gap-2 text-neutral-400 hover:text-[#F5F1EB] transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm">Return to Cart</span>
+          </motion.button>
 
-            {/* Place Order Button */}
-            <button className="w-full sm:w-auto py-3 px-10 bg-[#A0552D] text-white text-sm uppercase font-medium rounded-md">
-              Place Order
-            </button>
-          </div>
+          {/* Place Order Button */}
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto bg-[#C38E5B] hover:bg-[#D4A574] text-black font-semibold px-10 py-4 rounded-xl uppercase tracking-wider transition-all duration-300 shadow-lg shadow-[#C38E5B]/20 flex items-center justify-center gap-2"
+          >
+            <Lock className="w-4 h-4" />
+            Place Order
+          </motion.button>
         </div>
       </div>
-    </div>
-
-  )
-}
+    </motion.div>
+  );
+};
 
 export default PaymentOptions;

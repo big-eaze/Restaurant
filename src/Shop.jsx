@@ -1,5 +1,5 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuPortal } from "@radix-ui/react-dropdown-menu";
-import { CheckCircle, ChevronDown, ShoppingCart } from "lucide-react";
+import { CheckCircle, ChevronDown, ShoppingCart, Search, Filter, Tag, DollarSign, Package, Star } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { FaShoppingBasket, FaShoppingCart } from "react-icons/fa";
@@ -9,57 +9,46 @@ import Header from "./components/Header";
 import { shopData } from "../data/shopFood.js";
 import { useAddToCart } from "./Utils/hooks";
 
-function Shop() {
+function Shop({ openCart, setOpenCart }) {
 
   const [sortOrder, setSortOrder] = useState('Default sorting');
   const [priceRange, setPriceRange] = useState([0, 100]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedTag, setSelectedTag] = useState(null);
-
-  // for adding to cart
   const [addedProduct, setAddedProduct] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const addToCart = useAddToCart();
 
-
   const handleAddToCart = (id) => {
     addToCart(id);
     setAddedProduct(id);
-
     console.log(`Added product ID: ${id} to cart`);
-    // Hide the message after 2s
     setTimeout(() => setAddedProduct(null), 2000);
   };
 
-
-
-  // 1. Filter by category
+  // Filter logic
   let filteredData = shopData.filter(product => {
     if (selectedCategory === "All") return true;
     return product.category === selectedCategory;
   });
 
-  // 2. Filter by search
   filteredData = filteredData.filter(product =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 3. Filter by price
   filteredData = filteredData.filter(product =>
     product.initialPrice >= priceRange[0] && product.initialPrice <= priceRange[1]
   );
 
-  // 4. Filter by tag
   if (selectedTag) {
     filteredData = filteredData.filter(product =>
       product.tags?.includes(selectedTag)
     );
   }
 
-  // Sorting (example for price low to high)
+  // Sorting
   if (sortOrder === "Sort by price: low to high") {
     filteredData = [...filteredData].sort((a, b) => a.initialPrice - b.initialPrice);
   }
@@ -67,211 +56,353 @@ function Shop() {
     filteredData = [...filteredData].sort((a, b) => b.initialPrice - a.initialPrice);
   }
 
-  // Then apply pagination
+  // Pagination
   const rowsPerPage = 6;
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = shopData.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-  const totalPages = Math.ceil(shopData.length / rowsPerPage);
+  const categories = [
+    { name: "All", count: 8 },
+    { name: "Crustaceans", count: 2 },
+    { name: "Farmed Fish", count: 2 },
+    { name: "Saltwater Fish", count: 4 },
+  ];
 
-  const handleSortChange = (e) => setSortOrder(e.target.value);
+  const tags = ["FISH", "CRABS", "CRUSTACEANS", "SALTWATER", "BURGER", "SOUP"];
+
   return (
     <>
-      <Header />
-      <div className="w-full h-[700px] bg-cover bg-center" style={{ backgroundImage: "url('/food-display/food-5.jpg')" }}>
-        <div className="bg-dark-overlay w-full h-full flex flex-col items-center justify-center gap-6">
-          <div className="flex flex-col gap-4 items-center">
-            <div className="w-[30px] h-[4px] rounded-xl bg-orange-600"></div>
-            <p className="text-white text-sm">ONLINE STORE</p>
-          </div>
-          <h1 className="font-cormorant font-bold text-6xl text-white">SHOP</h1>
-          <p className="text-white text-center">Quaerat debitis, vel, sapiente dicta sequi <br />
-            labore porro pariatur harum expedita.
-          </p>
-        </div>
-      </div>
-      <div className="bg-[#F9F9EE]">
-        <div className="max-w-7xl mx-auto  flex flex-col lg:flex-row gap-10 px-6 lg:px-12 py-20">
-          {/* Sidebar */}
-          <aside className="w-full lg:w-1/4 flex flex-col gap-10">
-            {/* Search */}
-            <input
-              className="shadow-lg p-3 bg-[#F9F9EE] outline-none rounded"
-              type="text"
-              placeholder="Search Products"
-            />
+      <Header openCart={openCart} setOpenCart={setOpenCart} />
 
-            {/* Categories */}
-            <div>
-              <h2 className="text-lg font-cormorant font-semibold mb-4">CATEGORIES</h2>
-              <ul className="space-y-2 text-[14px]">
-                <li>All (8)</li>
-                <li>Crustaceans (2)</li>
-                <li>Farmed Fish (2)</li>
-                <li>Saltwater Fish (4)</li>
-              </ul>
+      <div className="w-full min-h-screen bg-[#060607]">
+        {/* Hero Section */}
+        <section className="relative h-[70vh] sm:h-[80vh] flex items-center justify-center overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center scale-105"
+            style={{ backgroundImage: "url('/food-display/food-5.jpg')" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-[#060607]" />
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="relative z-10 text-center px-4 max-w-4xl mx-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-xs sm:text-sm tracking-widest uppercase mb-8">
+              <ShoppingCart className="w-4 h-4 text-[#C38E5B]" />
+              <span className="text-[#F5F1EB]/90">Online Store</span>
             </div>
 
-            {/* Filter by price */}
-            <div>
-              <h2 className="text-lg font-cormorant font-semibold mb-4">Filter by price</h2>
-              <div className="flex flex-col">
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={priceRange[0]}
-                  onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
-                  className="w-full mb-2 accent-[#A0552D]"
-                />
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
-                  className="w-full mb-2 accent-[#A0552D]"
-                />
-              </div>
-              <p className="text-sm">Price range: {priceRange[0]} - {priceRange[1]}</p>
-            </div>
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif text-white mb-6 leading-tight">
+              Shop
+            </h1>
 
-            {/* Tags */}
-            <div>
-              <h2 className="text-lg font-cormorant font-semibold mb-4">Tags</h2>
-              <div className="flex flex-wrap gap-2">
-                {["FISH", "CRABS", "CRUSTACEANS", "SALTWATER", "BURGER", "SOUP"].map((tag, i) => (
-                  <button
-                    key={i}
-                    className="border-2 border-[#A0552D] text-[#A0552D] text-[12px] px-3 py-1 rounded"
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </aside>
+            <p className="text-neutral-300 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+              Discover our premium selection of authentic ingredients and specialty items
+            </p>
+          </motion.div>
+        </section>
 
-          {/* Main Shop Content */}
-          <main className="w-full lg:w-3/4">
-            <div className="flex flex-row items-start md:items-end justify-between gap-4 mb-8">
-              <div>
-                <h1 className="font-cormorant font-bold text-4xl">SHOP</h1>
-                <p className="text-[12px] text-gray-500">Showing 1-6 of 8 results</p>
-              </div>
-              {/* Sorting */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="flex items-center justify-between min-w-[160px] p-2 shadow-lg text-sm outline-none">
-                    Default sorting <ChevronDown className="w-4 h-4" />
-                  </button>
-                </DropdownMenuTrigger>
+        {/* Shop Content */}
+        <section className="py-20 px-4 sm:px-6 lg:px-12">
+          <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
 
-                <DropdownMenuPortal>
-                  <DropdownMenuContent
-                    className="custom-scrollbar w-[var(--radix-dropdown-menu-trigger-width)] max-h-[150px] overflow-y-auto whitespace-nowrap bg-[#F9F9EE] shadow-lg mt-2 text-sm p-2 z-[9999]"
-                  >
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Default Sorting</DropdownMenuItem>
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Sort by popularity</DropdownMenuItem>
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Sort by average rating</DropdownMenuItem>
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Sort by latest</DropdownMenuItem>
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Sort by price: low to high</DropdownMenuItem>
-                    <DropdownMenuItem className="w-full truncate p-2 cursor-pointer outline-none">Sort by price: high to low</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenuPortal>
-              </DropdownMenu>
-            </div>
-
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {currentRows.map((product, index) => (
-                <div
-                  key={index}
-                  className="relative bg-[#C4A484] shadow-md flex flex-col h-full gap-4 rounded overflow-hidden"
-                >
-                  {product.initialPrice > product.price && (
-                    <div className="absolute top-2 left-2 bg-[#A0522D] px-3 py-1 text-[12px] font-roboto font-bold text-white rounded">
-                      SALE!
-                    </div>
-                  )}
-
-                  {/* Slide-in confirmation text */}
-                  <AnimatePresence mode="wait">
-                    {addedProduct === product.id && (
-                      <motion.div
-                        initial={{ x: "100%", opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: "100%", opacity: 0 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="absolute top-4 right-4 flex items-center gap-3 bg-green-50 border border-[#A0552D] shadow-md rounded-xl px-2 py-2 text-sm"
-                      >
-                        <span className="text-[#A0552D] font-medium flex items-center gap-2">
-                          {product.name} added
-                          <ShoppingCart className="w-5 h-5 text-[#A0552D]" />
-                        </span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  <img
-                    src={product.img}
-                    alt={product.name}
-                    className="w-full h-[200px] object-cover"
+            {/* Sidebar */}
+            <motion.aside
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full lg:w-1/4 space-y-8"
+            >
+              {/* Search */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Search className="w-5 h-5 text-[#C38E5B]" />
+                  <h3 className="text-white font-semibold">Search Products</h3>
+                </div>
+                <div className="relative">
+                  <input
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 pr-10 text-white placeholder:text-neutral-500 focus:outline-none focus:border-[#C38E5B] focus:ring-2 focus:ring-[#C38E5B]/20 transition-all"
+                    type="text"
+                    placeholder="Search..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
                   />
+                  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-500" />
+                </div>
+              </div>
 
-                  {/* Content that stretches to fill space */}
-                  <div className="px-3 flex flex-col flex-1">
-                    <h3 className="text-2xl font-semibold font-cormorant ">{product.name}</h3>
+              {/* Categories */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Filter className="w-5 h-5 text-[#C38E5B]" />
+                  <h3 className="text-white font-semibold">Categories</h3>
+                </div>
+                <ul className="space-y-2">
+                  {categories.map((cat) => (
+                    <li
+                      key={cat.name}
+                      onClick={() => setSelectedCategory(cat.name)}
+                      className={`flex items-center justify-between px-4 py-2 rounded-lg cursor-pointer transition-all ${selectedCategory === cat.name
+                          ? "bg-[#C38E5B]/20 text-[#C38E5B] border border-[#C38E5B]/30"
+                          : "text-neutral-300 hover:bg-white/5 hover:text-white"
+                        }`}
+                    >
+                      <span className="text-sm">{cat.name}</span>
+                      <span className="text-xs opacity-60">({cat.count})</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-                    {/* Push price+button to bottom */}
-                    <div className="flex items-center justify-between mt-auto pb-4">
-                      <div>
-                        <p className="text-xl font-bold font-cormorant">
-                          €{product.price.toFixed(2)}
-                        </p>
-                        <p className="text-sm text-gray-500 line-through">
-                          €{product.initialPrice.toFixed(2)}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => handleAddToCart(product.id, product.name)}
-                        className="bg-[#A0552D] hover:bg-[#A0552D]/40 text-white p-3 transition"
-                      >
-                        <FaShoppingCart className="w-4 h-4" />
-                      </button>
-                    </div>
+              {/* Filter by price */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <DollarSign className="w-5 h-5 text-[#C38E5B]" />
+                  <h3 className="text-white font-semibold">Filter by Price</h3>
+                </div>
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-neutral-400 text-xs mb-2 block">Min: €{priceRange[0]}</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={priceRange[0]}
+                      onChange={(e) => setPriceRange([+e.target.value, priceRange[1]])}
+                      className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#C38E5B]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-neutral-400 text-xs mb-2 block">Max: €{priceRange[1]}</label>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={priceRange[1]}
+                      onChange={(e) => setPriceRange([priceRange[0], +e.target.value])}
+                      className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-[#C38E5B]"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between pt-2 text-sm">
+                    <span className="text-[#C38E5B] font-medium">€{priceRange[0]}</span>
+                    <span className="text-neutral-500">—</span>
+                    <span className="text-[#C38E5B] font-medium">€{priceRange[1]}</span>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
 
+              {/* Tags */}
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <Tag className="w-5 h-5 text-[#C38E5B]" />
+                  <h3 className="text-white font-semibold">Tags</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <motion.button
+                      key={tag}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+                      className={`text-xs px-3 py-1.5 rounded-lg border transition-all ${selectedTag === tag
+                          ? "bg-[#C38E5B] text-black border-[#C38E5B]"
+                          : "bg-white/5 text-neutral-300 border-white/10 hover:bg-white/10 hover:border-[#C38E5B]/30"
+                        }`}
+                    >
+                      {tag}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
+            </motion.aside>
 
-            {/* Pagination */}
-            <div className="flex gap-2 justify-end mt-8">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`py-2 px-4 border rounded transition 
-                      ${currentPage === page
-                      ? "bg-[#A0552D] text-white"
-                      : "hover:bg-[#A0552D] hover:text-white"
-                    }`}
+            {/* Main Shop Content */}
+            <motion.main
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="w-full lg:w-3/4"
+            >
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 mb-8">
+                <div>
+                  <h2 className="text-4xl font-serif text-white mb-2">Our Products</h2>
+                  <p className="text-sm text-neutral-400">
+                    Showing {indexOfFirstRow + 1}-{Math.min(indexOfLastRow, filteredData.length)} of {filteredData.length} results
+                  </p>
+                </div>
+
+                {/* Sorting Dropdown */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex items-center justify-between gap-3 min-w-[200px] bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white hover:bg-white/10 hover:border-[#C38E5B]/30 transition-all focus:outline-none focus:border-[#C38E5B] focus:ring-2 focus:ring-[#C38E5B]/20"
+                    >
+                      <span className="text-sm">{sortOrder}</span>
+                      <ChevronDown className="w-4 h-4 text-neutral-400" />
+                    </motion.button>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuPortal>
+                    <DropdownMenuContent
+                      className="w-[var(--radix-dropdown-menu-trigger-width)] bg-[#0E0F14] border border-white/10 rounded-xl p-2 shadow-2xl mt-2 z-[9999]"
+                      sideOffset={8}
+                    >
+                      {[
+                        "Default sorting",
+                        "Sort by popularity",
+                        "Sort by average rating",
+                        "Sort by latest",
+                        "Sort by price: low to high",
+                        "Sort by price: high to low"
+                      ].map((option) => (
+                        <DropdownMenuItem
+                          key={option}
+                          onClick={() => setSortOrder(option)}
+                          className="text-neutral-300 hover:text-white hover:bg-white/5 rounded-lg px-4 py-2.5 cursor-pointer transition-colors outline-none text-sm"
+                        >
+                          {option}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenuPortal>
+                </DropdownMenu>
+              </div>
+
+              {/* Products Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {currentRows.map((product, index) => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 hover:border-[#C38E5B]/30 transition-all duration-300"
+                  >
+                    {/* Sale Badge */}
+                    {product.initialPrice > product.price && (
+                      <div className="absolute top-3 left-3 z-20 bg-[#C38E5B] px-3 py-1 text-xs font-bold text-black rounded-lg shadow-lg">
+                        SALE
+                      </div>
+                    )}
+
+                    {/* Added to Cart Notification */}
+                    <AnimatePresence mode="wait">
+                      {addedProduct === product.id && (
+                        <motion.div
+                          initial={{ x: "100%", opacity: 0 }}
+                          animate={{ x: 0, opacity: 1 }}
+                          exit={{ x: "100%", opacity: 0 }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                          className="absolute top-3 right-3 z-20 flex items-center gap-2 bg-green-500/90 backdrop-blur-sm px-3 py-2 rounded-lg shadow-lg"
+                        >
+                          <CheckCircle className="w-4 h-4 text-white" />
+                          <span className="text-white text-xs font-medium">Added!</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Product Image */}
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={product.img}
+                        alt={product.name}
+                        className="w-full h-[250px] object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+
+                    {/* Product Info */}
+                    <div className="p-5 flex flex-col flex-1">
+                      <h3 className="text-xl font-serif text-white mb-2 group-hover:text-[#C38E5B] transition-colors">
+                        {product.name}
+                      </h3>
+
+                      {/* Star Rating */}
+                      <div className="flex items-center gap-1 mb-4">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={`w-3.5 h-3.5 ${i < 4 ? "fill-[#C38E5B] text-[#C38E5B]" : "text-neutral-600"
+                              }`}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Price & Add to Cart */}
+                      <div className="flex items-end justify-between mt-auto">
+                        <div>
+                          <p className="text-2xl font-bold text-[#C38E5B] font-serif">
+                            €{product.price.toFixed(2)}
+                          </p>
+                          {product.initialPrice > product.price && (
+                            <p className="text-sm text-neutral-500 line-through">
+                              €{product.initialPrice.toFixed(2)}
+                            </p>
+                          )}
+                        </div>
+
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleAddToCart(product.id)}
+                          className="bg-[#C38E5B] hover:bg-[#D4A574] text-black p-3 rounded-xl transition-all duration-300 shadow-lg shadow-[#C38E5B]/20"
+                        >
+                          <ShoppingCart className="w-5 h-5" />
+                        </motion.button>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* No Results */}
+              {currentRows.length === 0 && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-20"
                 >
-                  {page}
-                </button>
-              ))}
-            </div>
+                  <Package className="w-16 h-16 text-neutral-600 mx-auto mb-4" />
+                  <h3 className="text-xl text-neutral-400 mb-2">No products found</h3>
+                  <p className="text-neutral-500 text-sm">Try adjusting your filters</p>
+                </motion.div>
+              )}
 
-          </main>
-        </div>
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-2">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                    <motion.button
+                      key={page}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setCurrentPage(page)}
+                      className={`w-10 h-10 rounded-xl font-medium transition-all ${currentPage === page
+                          ? "bg-[#C38E5B] text-black shadow-lg shadow-[#C38E5B]/20"
+                          : "bg-white/5 text-neutral-300 border border-white/10 hover:bg-white/10 hover:border-[#C38E5B]/30"
+                        }`}
+                    >
+                      {page}
+                    </motion.button>
+                  ))}
+                </div>
+              )}
+            </motion.main>
+          </div>
+        </section>
+
+        <NewsletterSec />
+        <Footer />
       </div>
-
-      <NewsletterSec />
-      <Footer />
     </>
-  )
+  );
 }
 
 export default Shop;
